@@ -58,8 +58,17 @@ class TaskManager {
         taskUl.innerHTML = "";
         this.tasks.forEach((task) => {
             const taskLi = document.createElement("li");
+            const taskButtonContainer = document.createElement("div");
+            const deleteButton = document.createElement("button");
+            taskLi.classList.add("task");
+            taskButtonContainer.classList.add("buttons-container");
+            deleteButton.setAttribute("id", "delete-btn");
             taskLi.innerHTML = task.getTitle();
+            deleteButton.textContent = "Delete";
             taskUl.appendChild(taskLi);
+            taskLi.appendChild(taskButtonContainer);
+            taskButtonContainer.appendChild(deleteButton);
+            deleteButton.addEventListener("click", () => removeTask(task.getId()));
         });
         console.log(this.tasks);
     }
@@ -74,6 +83,10 @@ function createTask() {
     const taskTitle = taskElement.value;
     const taskItem = new Task(1, taskTitle, "created");
     taskManager.add(taskItem);
+    taskManager.printAll();
+}
+function removeTask(taskId) {
+    taskManager.remove(taskId);
     taskManager.printAll();
 }
 const createButton = document.getElementById("createButton");

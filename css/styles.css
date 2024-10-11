@@ -1,4 +1,4 @@
-/* .header {
+.header {
   margin: 0;
   padding: 0;
   background-color: #ddf7d1;
@@ -17,7 +17,7 @@ body {
 .filter-sort-section {
   display: flex;
   gap: 1rem;
-} */
+}
 
 ul {
   list-style-type: none;
@@ -47,7 +47,7 @@ ul {
   background-color: #d1f7d5;
 }
 
-.buttonsContainer {
+.buttons-container {
   display: flex;
   gap: 0.5rem;
   margin-left: 1rem;
