@@ -99,8 +99,6 @@ class TaskManager implements IManager {
 
       deleteButton.addEventListener("click", () => removeTask(task.getId()));
     });
-
-    console.log(this.tasks);
   }
 }
 
@@ -117,6 +115,9 @@ function createTask(): void {
 
   taskManager.add(taskItem);
   taskManager.printAll();
+
+  taskElement.value = "";
+  taskElement.focus();
 }
 
 function removeTask(taskId: number): void {
@@ -125,5 +126,11 @@ function removeTask(taskId: number): void {
 }
 
 const createButton = document.getElementById("createButton") as HTMLButtonElement;
+const taskElementInput = document.getElementById("newTaskInput") as HTMLInputElement;
 
 createButton.addEventListener("click", createTask);
+taskElementInput.addEventListener("keydown", (event) => {
+  if (event.key === "Enter") {
+    createTask();
+  }
+});

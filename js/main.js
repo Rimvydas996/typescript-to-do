@@ -70,7 +70,6 @@ class TaskManager {
             taskButtonContainer.appendChild(deleteButton);
             deleteButton.addEventListener("click", () => removeTask(task.getId()));
         });
-        console.log(this.tasks);
     }
 }
 const taskItem = new Task(0, "sutvarkyti dokumentus", "created");
@@ -84,10 +83,18 @@ function createTask() {
     const taskItem = new Task(1, taskTitle, "created");
     taskManager.add(taskItem);
     taskManager.printAll();
+    taskElement.value = "";
+    taskElement.focus();
 }
 function removeTask(taskId) {
     taskManager.remove(taskId);
     taskManager.printAll();
 }
 const createButton = document.getElementById("createButton");
+const taskElementInput = document.getElementById("newTaskInput");
 createButton.addEventListener("click", createTask);
+taskElementInput.addEventListener("keydown", (event) => {
+    if (event.key === "Enter") {
+        createTask();
+    }
+});
