@@ -12,11 +12,7 @@ interface IManager {
 
 class Task implements IModel {
   private date: Date;
-  constructor(
-    private id: number,
-    private title: string,
-    private status: string
-  ) {
+  constructor(private id: number, private title: string, private status: string) {
     this.date = new Date();
   }
 
@@ -71,9 +67,7 @@ class TaskManager implements IManager {
   }
 
   update(model: Task) {
-    const index = this.tasks.findIndex(
-      (task: Task) => task.getId() === model.getId()
-    );
+    const index = this.tasks.findIndex((task: Task) => task.getId() === model.getId());
     if (index > -1) {
       this.tasks[index] = model;
     }
@@ -85,14 +79,26 @@ class TaskManager implements IManager {
 
   printAll() {
     const taskUl = document.getElementById("tasksList") as HTMLUListElement;
+
     taskUl.innerHTML = "";
     this.tasks.forEach((task) => {
       const taskLi = document.createElement("li") as HTMLLIElement;
-      taskLi.innerHTML = task.getTitle();
-      taskUl.appendChild(taskLi);
-    });
+      const taskButtonContainer = document.createElement("div") as HTMLDivElement;
+      const deleteButton = document.createElement("button") as HTMLButtonElement;
 
-    console.log(this.tasks);
+      taskLi.classList.add("task");
+      taskButtonContainer.classList.add("buttons-container");
+      deleteButton.setAttribute("id", "delete-btn");
+
+      taskLi.innerHTML = task.getTitle();
+      deleteButton.textContent = "Delete";
+
+      taskUl.appendChild(taskLi);
+      taskLi.appendChild(taskButtonContainer);
+      taskButtonContainer.appendChild(deleteButton);
+
+      deleteButton.addEventListener("click", () => removeTask(task.getId()));
+    });
   }
 }
 
@@ -103,16 +109,28 @@ function createTask(): void {
   ///paimam is input laukelio duomenys juos priskiriam kintamajam.
   // su tais duomenimis turesime sukurti nauja taskItem
   // ta task item turesime prideti i task manager
-  const taskElement = document.getElementById(
-    "newTaskInput"
-  ) as HTMLInputElement;
+  const taskElement = document.getElementById("newTaskInput") as HTMLInputElement;
   const taskTitle = taskElement.value;
   const taskItem = new Task(1, taskTitle, "created");
+
   taskManager.add(taskItem);
+  taskManager.printAll();
+
+  taskElement.value = "";
+  taskElement.focus();
+}
+
+function removeTask(taskId: number): void {
+  taskManager.remove(taskId);
   taskManager.printAll();
 }
 
-const createButton = document.getElementById(
-  "createButton"
-) as HTMLButtonElement;
+const createButton = document.getElementById("createButton") as HTMLButtonElement;
+const taskElementInput = document.getElementById("newTaskInput") as HTMLInputElement;
+
 createButton.addEventListener("click", createTask);
+taskElementInput.addEventListener("keydown", (event) => {
+  if (event.key === "Enter") {
+    createTask();
+  }
+});

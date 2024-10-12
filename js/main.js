@@ -58,10 +58,18 @@ class TaskManager {
         taskUl.innerHTML = "";
         this.tasks.forEach((task) => {
             const taskLi = document.createElement("li");
+            const taskButtonContainer = document.createElement("div");
+            const deleteButton = document.createElement("button");
+            taskLi.classList.add("task");
+            taskButtonContainer.classList.add("buttons-container");
+            deleteButton.setAttribute("id", "delete-btn");
             taskLi.innerHTML = task.getTitle();
+            deleteButton.textContent = "Delete";
             taskUl.appendChild(taskLi);
+            taskLi.appendChild(taskButtonContainer);
+            taskButtonContainer.appendChild(deleteButton);
+            deleteButton.addEventListener("click", () => removeTask(task.getId()));
         });
-        console.log(this.tasks);
     }
 }
 const taskItem = new Task(0, "sutvarkyti dokumentus", "created");
@@ -75,6 +83,18 @@ function createTask() {
     const taskItem = new Task(1, taskTitle, "created");
     taskManager.add(taskItem);
     taskManager.printAll();
+    taskElement.value = "";
+    taskElement.focus();
+}
+function removeTask(taskId) {
+    taskManager.remove(taskId);
+    taskManager.printAll();
 }
 const createButton = document.getElementById("createButton");
+const taskElementInput = document.getElementById("newTaskInput");
 createButton.addEventListener("click", createTask);
+taskElementInput.addEventListener("keydown", (event) => {
+    if (event.key === "Enter") {
+        createTask();
+    }
+});
